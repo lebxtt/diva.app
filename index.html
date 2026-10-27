@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#8d6b9f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="DIVA" />
+  <meta name="description" content="DIVA — organização pessoal, tarefas, projetos, estudos, hábitos e finanças." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=5" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>DIVA — Minha vida</title>
+</head>
+<body>
+  <div id="appShell">
+    <header class="topbar">
+      <div>
+        
+        <h1>DIVA <span>✦</span></h1>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="notificationBtn" aria-label="Ativar lembretes" title="Lembretes">🔔</button>
+        <button class="avatar-btn" data-go="mais" aria-label="Abrir mais opções">D</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="view active" id="view-hoje" data-view="hoje">
+        <div class="hero-card">
+          <div class="hero-top">
+            <div>
+              
+              <h2 id="greeting">Organize só o que importa hoje.</h2>
+            </div>
+            <span class="soft-pill" id="dayProgressText">0%</span>
+          </div>
+          <div class="progress"><div id="dayProgressBar"></div></div>
+          <div class="energy-wrap">
+            <span>Como está sua energia?</span>
+            <div class="energy-switch" id="energySwitch">
+              <button data-energy="baixa">🌙 Baixa</button>
+              <button data-energy="media" class="active">☁️ Média</button>
+              <button data-energy="alta">⚡ Alta</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div>
+            
+            <h3 id="priorityTitle">Escolha uma tarefa</h3>
+          </div>
+          <button class="link-btn" id="pickPriorityBtn">Definir</button>
+        </div>
+        <div id="priorityCard" class="priority-card empty-state compact">Nenhuma prioridade definida para hoje.</div>
+
+        <div class="section-head">
+          <div><span class="eyebrow">Meu Dia</span><h3>Minha programação</h3></div>
+          <button class="circle-add" id="dayAdd" aria-label="Adicionar compromisso ao dia">＋</button>
+        </div>
+        <div class="day-date-navigation">
+          <button type="button" id="dayPrev" aria-label="Dia anterior">‹</button>
+          <input type="date" id="dayDate" aria-label="Data da programação">
+          <button type="button" id="dayNext" aria-label="Próximo dia">›</button>
+        </div>
+        <div class="day-count-row"><span id="dayCount">0 concluídos</span></div>
+        <div class="day-checklist-track"><div id="dayChecklistProgress"></div></div>
+        <span id="dayProgressText" class="hidden" aria-hidden="true"></span><div class="hidden" aria-hidden="true"><div id="dayProgressBar"></div></div>
+        <div id="todayTimeline" class="timeline"></div>
+      </section>
+
+      <section class="view" id="view-tarefas" data-view="tarefas">
+        <div class="page-title-row">
+          <div><h2>Tarefas</h2></div>
+          <button class="primary small" data-open-add="task">＋ Nova</button>
+        </div>
+        <div class="filter-row" id="taskFilters">
+          <button class="chip active" data-filter="ativas">Ativas</button>
+          <button class="chip" data-filter="hoje">Hoje</button>
+          <button class="chip" data-filter="alta">Alta prioridade</button>
+          <button class="chip" data-filter="arquivadas">Arquivadas</button>
+        </div>
+        <div class="card filter-card">
+          <select id="areaFilter" aria-label="Filtrar por área"></select>
+          <select id="sortTasks" aria-label="Ordenar tarefas">
+            <option value="smart">Ordem inteligente</option>
+            <option value="due">Prazo</option>
+            <option value="priority">Prioridade</option>
+            <option value="created">Mais recentes</option>
+          </select>
+        </div>
+        <div id="taskList" class="stack"></div>
+      </section>
+
+      <section class="view" id="view-calendario" data-view="calendario">
+        <div class="page-title-row">
+          <div><span class="eyebrow">Visão geral</span><h2>Calendário</h2></div>
+          <button class="primary small" data-open-add="event">＋ Evento</button>
+        </div>
+        <div class="calendar-card card">
+          <div class="calendar-header">
+            <button class="icon-btn" id="prevMonth">‹</button>
+            <h3 id="calendarTitle"></h3>
+            <button class="icon-btn" id="nextMonth">›</button>
+          </div>
+          <div class="weekdays"><span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span></div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+        <div class="section-head"><div><span class="eyebrow">Dia selecionado</span><h3 id="selectedDateTitle"></h3></div></div>
+        <div id="selectedDateItems" class="stack"></div>
+      </section>
+
+      <section class="view" id="view-projetos" data-view="projetos">
+        <div class="page-title-row">
+          <div><h2>Projetos</h2></div>
+          <button class="primary small" id="newProjectBtn">＋ Projeto</button>
+        </div>
+        <div id="projectList" class="stack"></div>
+      </section>
+
+      <section class="view" id="view-mais" data-view="mais">
+        <div class="page-title-row"><div><span class="eyebrow">Seu espaço</span><h2>Mais</h2></div></div>
+        <div class="feature-grid">
+          <button class="feature-card" data-subview="medicina"><span>🩺</span><b>Medicina</b><small>Provas, revisões e estudo</small></button>
+          <button class="feature-card" data-subview="habitos"><span>🌱</span><b>Hábitos</b><small>Rotinas diárias</small></button>
+          <button class="feature-card" data-subview="financeiro"><span>💸</span><b>Financeiro</b><small>Orçamento mensal</small></button>
+          <button class="feature-card" data-subview="config"><span>⚙️</span><b>Configurações</b><small>Backup, dados e PWA</small></button>
+        </div>
+
+        <div class="subview hidden" id="subview-medicina">
+          <div class="subview-head"><button class="back-btn">‹</button><div><span class="eyebrow">Painel</span><h2>Medicina</h2></div></div>
+          <div class="stats-grid" id="medicineStats"></div>
+          <div class="card study-card">
+            <div class="section-head no-margin"><div><span class="eyebrow">Estudo rápido</span><h3>Tenho quanto tempo?</h3></div></div>
+            <div class="study-time-buttons" id="studyTimeButtons">
+              <button data-min="20">20 min</button><button data-min="30">30 min</button><button data-min="60">1 h</button><button data-min="120">2 h</button>
+            </div>
+            <div id="studySuggestion" class="study-suggestion">Escolha seu tempo disponível e eu priorizo o que estudar.</div>
+          </div>
+          <div class="section-head"><div><span class="eyebrow">Próximos</span><h3>Provas e trabalhos</h3></div><button class="circle-add" id="addAssessmentBtn">＋</button></div>
+          <div id="assessmentList" class="stack"></div>
+          <div class="section-head"><div><span class="eyebrow">Revisão ativa</span><h3>Revisões e flashcards</h3></div><button class="circle-add" id="addReviewBtn">＋</button></div>
+          <div id="reviewList" class="stack"></div>
+        </div>
+
+        <div class="subview hidden" id="subview-habitos">
+          <div class="subview-head"><button class="back-btn">‹</button><div><span class="eyebrow">Consistência</span><h2>Hábitos</h2></div></div>
+          <div id="habitToday" class="stack"></div>
+          <button class="secondary wide" id="addHabitBtn">＋ Adicionar hábito</button>
+          <div class="card"><span class="eyebrow">Últimos 7 dias</span><div id="habitHistory"></div></div>
+        </div>
+
+        <div class="subview hidden" id="subview-financeiro">
+          <div class="subview-head"><button class="back-btn">‹</button><div><span class="eyebrow">Orçamento</span><h2>Financeiro</h2></div></div>
+          <div id="financeStats" class="stats-grid"></div>
+          <div class="card"><div class="section-head no-margin"><div><span class="eyebrow">Categorias</span><h3>Planejamento mensal</h3></div><button class="circle-add" id="addBudgetBtn">＋</button></div><div id="budgetList"></div></div>
+        </div>
+
+        <div class="subview hidden" id="subview-config">
+          <div class="subview-head"><button class="back-btn">‹</button><div><span class="eyebrow">DIVA</span><h2>Configurações</h2></div></div>
+          <div class="card settings-list">
+            <button id="installBtn" class="setting-row"><span>📲</span><div><b>Instalar aplicativo</b><small>Adicionar como PWA</small></div><strong>›</strong></button>
+            <button id="exportBtn" class="setting-row"><span>📦</span><div><b>Exportar backup</b><small>Baixar todos os seus dados em JSON</small></div><strong>›</strong></button>
+            <button id="importBtn" class="setting-row"><span>📥</span><div><b>Importar backup</b><small>Restaurar dados salvos</small></div><strong>›</strong></button>
+            <button id="calendarExportBtn" class="setting-row"><span>🗓️</span><div><b>Exportar calendário</b><small>Arquivo .ics com compromissos e tarefas</small></div><strong>›</strong></button>
+            <button id="resetBtn" class="setting-row danger"><span>🧹</span><div><b>Apagar todos os dados</b><small>Voltar ao estado inicial</small></div><strong>›</strong></button>
+          </div>
+          <div class="card"><h3>Sobre os lembretes</h3><p class="muted">O DIVA pode avisar enquanto está aberto e, quando o navegador permitir, mostrar notificações. Lembretes totalmente confiáveis com o app fechado exigem um serviço de push externo.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <button id="fab" class="fab" aria-label="Adicionar">＋</button>
+
+    <nav class="bottom-nav" aria-label="Navegação principal">
+      <button class="active" data-nav="hoje"><span>⌂</span><small>Hoje</small></button>
+      <button data-nav="tarefas"><span>✓</span><small>Tarefas</small></button>
+      <button data-nav="calendario"><span>▦</span><small>Calendário</small></button>
+      <button data-nav="projetos"><span>◇</span><small>Projetos</small></button>
+      <button data-nav="mais"><span>•••</span><small>Mais</small></button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><h2 id="modalTitle">Adicionar</h2><button class="icon-btn" id="closeModal">✕</button></div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <input type="file" id="backupFile" accept="application/json" hidden />
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
